@@ -1,7 +1,14 @@
 # StreetPass for Bluesky
 
+![StreetPass for Bluesky: finds the Bluesky accounts behind the sites you visit](store/promo-marquee.jpg)
+
 A Chrome and Firefox extension that collects the Bluesky accounts behind the sites you visit.
 Inspired by [streetpass.social](https://streetpass.social), which does the same for Mastodon.
+
+[Website](https://wakahuula.github.io/streetpass-bluesky/) ·
+[Download for Chrome](https://github.com/wakahuula/streetpass-bluesky/releases/latest/download/streetpass-bluesky-chrome.zip) ·
+[Download for Firefox](https://github.com/wakahuula/streetpass-bluesky/releases/latest/download/streetpass-bluesky-firefox.zip) ·
+[Privacy policy](https://wakahuula.github.io/streetpass-bluesky/privacy.html)
 
 ## How it finds people
 
@@ -29,6 +36,11 @@ the browser clears when it restarts.
 The full privacy policy is at <https://wakahuula.github.io/streetpass-bluesky/privacy.html>.
 
 ## In the popup
+
+<p>
+  <img src="store/screenshot-1.jpg" width="49%" alt="Light popup with one person on the current page and two found today">
+  <img src="store/screenshot-2.jpg" width="49%" alt="Dark popup with the switches for pausing and DNS lookup">
+</p>
 
 - The toolbar icon turns blue while the current page shows someone, and that person is listed
   under "On this page". The badge counts people found since you last opened the popup.

@@ -17,11 +17,11 @@ function person(name: string, handle: string, foundOn: string, verified: boolean
 }
 
 // .example handles can't belong to anyone real.
-const mira = person("Mira Lindqvist", "mira.example", "https://mira.example/", true, 60_000);
+const mira = person("Mira Lindqvist", "mira.example", "mira.example", true, 60_000);
 const people: People = {
   [mira.did]: mira,
-  "did:plc:jonas": person("Jonas Okafor", "jonas.example", "https://jonas.example/notes", true, 2 * 3_600_000),
-  "did:plc:sam": person("Sam Teller", "sam.example", "https://journal.example/about", false, 5 * 3_600_000),
+  "did:plc:jonas": person("Jonas Okafor", "jonas.example", "jonas.example", true, 2 * 3_600_000),
+  "did:plc:sam": person("Sam Teller", "sam.example", "journal.example", false, 5 * 3_600_000),
 };
 
 const context = await chromium.launchPersistentContext("", {

@@ -68,7 +68,7 @@ function renderPerson(person: Person): HTMLLIElement {
   // Verified people need no source line: their handle is the site.
   if (!person.verified) {
     item.querySelector(".source")!.textContent =
-      `Unverified link on ${siteOf(person.foundOn) ?? person.foundOn}`;
+      `Unverified link on ${person.foundOn}`;
   }
 
   const remove = item.querySelector<HTMLButtonElement>(".icon-button")!;

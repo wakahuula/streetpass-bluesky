@@ -1,5 +1,7 @@
 // The list of people found so far, and the pure rules for changing it.
 
+import { siteOf } from "./detect.ts";
+
 export type Profile = {
   did: string;
   handle: string;
@@ -8,7 +10,7 @@ export type Profile = {
 };
 
 export type Person = Profile & {
-  // Page the person was found on.
+  // Domain of the site the person was found on, without path or query.
   foundOn: string;
   foundAt: number;
   // True when the page's domain is the person's handle. A rel="me" link on
@@ -111,4 +113,13 @@ export function groupPeople(
     groups[index]!.people.push(person);
   }
   return groups.filter((g) => g.people.length > 0);
+}
+
+// Version 0.2.0 stored the full page URL in foundOn. Keeps only the domain.
+export function withDomainsOnly(people: People): People {
+  const next: People = {};
+  for (const [did, person] of Object.entries(people)) {
+    next[did] = { ...person, foundOn: siteOf(person.foundOn) ?? person.foundOn };
+  }
+  return next;
 }

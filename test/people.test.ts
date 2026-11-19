@@ -6,36 +6,37 @@ import {
   profileUrl,
   refreshPeople,
   sortedPeople,
+  withDomainsOnly,
   type People,
 } from "../src/lib/people.ts";
 
 const alice = { did: "did:plc:alice", handle: "alice.com", displayName: "Alice" };
 
 test("addPerson adds someone new", () => {
-  const { people, isNew } = addPerson({}, alice, "https://alice.com/", true, 1);
+  const { people, isNew } = addPerson({}, alice, "alice.com", true, 1);
   assert.equal(isNew, true);
   assert.equal(people[alice.did]?.foundAt, 1);
   assert.equal(people[alice.did]?.verified, true);
 });
 
 test("a verified sighting replaces an unverified one", () => {
-  const first = addPerson({}, alice, "https://blog.example/", false, 1).people;
-  const { people, isNew } = addPerson(first, alice, "https://alice.com/", true, 2);
+  const first = addPerson({}, alice, "blog.example", false, 1).people;
+  const { people, isNew } = addPerson(first, alice, "alice.com", true, 2);
   assert.equal(isNew, false);
   assert.equal(people[alice.did]?.verified, true);
-  assert.equal(people[alice.did]?.foundOn, "https://alice.com/");
+  assert.equal(people[alice.did]?.foundOn, "alice.com");
   assert.equal(people[alice.did]?.foundAt, 1);
 });
 
 test("an unverified sighting never downgrades", () => {
-  const first = addPerson({}, alice, "https://alice.com/", true, 1).people;
-  const { people } = addPerson(first, alice, "https://blog.example/", false, 2);
+  const first = addPerson({}, alice, "alice.com", true, 1).people;
+  const { people } = addPerson(first, alice, "blog.example", false, 2);
   assert.equal(people[alice.did]?.verified, true);
-  assert.equal(people[alice.did]?.foundOn, "https://alice.com/");
+  assert.equal(people[alice.did]?.foundOn, "alice.com");
 });
 
 test("refreshPeople drops verification when the handle changes", () => {
-  const people = addPerson({}, alice, "https://alice.com/", true, 1).people;
+  const people = addPerson({}, alice, "alice.com", true, 1).people;
   const same = refreshPeople(people, [{ ...alice, displayName: "Alice B." }], 2);
   assert.equal(same[alice.did]?.verified, true);
   assert.equal(same[alice.did]?.displayName, "Alice B.");
@@ -49,8 +50,8 @@ test("refreshPeople ignores people that were removed", () => {
 });
 
 test("sortedPeople puts the latest first", () => {
-  let people = addPerson({}, alice, "https://alice.com/", true, 1).people;
-  people = addPerson(people, { did: "did:plc:bob", handle: "bob.com" }, "https://bob.com/", true, 2).people;
+  let people = addPerson({}, alice, "alice.com", true, 1).people;
+  people = addPerson(people, { did: "did:plc:bob", handle: "bob.com" }, "bob.com", true, 2).people;
   assert.deepEqual(sortedPeople(people).map((p) => p.handle), ["bob.com", "alice.com"]);
 });
 
@@ -66,7 +67,7 @@ test("groupPeople sorts people into page, today, week and earlier", () => {
   const now = new Date(2026, 10, 19, 12).getTime();
   const day = 24 * 60 * 60 * 1000;
   const person = (did: string, foundAt: number) => ({
-    did, handle: `${did}.com`, foundOn: `https://${did}.com/`, foundAt, verified: true, refreshedAt: foundAt,
+    did, handle: `${did}.com`, foundOn: `${did}.com`, foundAt, verified: true, refreshedAt: foundAt,
   });
   const people: People = {
     here: person("here", now - 30 * day),
@@ -87,8 +88,16 @@ test("groupPeople sorts people into page, today, week and earlier", () => {
 });
 
 test("groupPeople filters by name, handle or site and drops empty groups", () => {
-  const people = addPerson({}, alice, "https://blog.example/", false, 1).people;
+  const people = addPerson({}, alice, "blog.example", false, 1).people;
   assert.equal(groupPeople(people, [], "ALI", 2).length, 1);
   assert.equal(groupPeople(people, [], "blog.example", 2).length, 1);
   assert.deepEqual(groupPeople(people, [], "bob", 2), []);
+});
+
+test("withDomainsOnly cuts stored page URLs down to the domain", () => {
+  const people = addPerson({}, alice, "https://www.blog.example/post?token=abc#top", false, 1).people;
+  assert.equal(withDomainsOnly(people)[alice.did]?.foundOn, "blog.example");
+  // Already a domain: unchanged.
+  const clean = addPerson({}, alice, "blog.example", false, 1).people;
+  assert.equal(withDomainsOnly(clean)[alice.did]?.foundOn, "blog.example");
 });

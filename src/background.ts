@@ -1,7 +1,7 @@
 import { ext } from "./lib/ext.ts";
 import { getProfile, getProfiles, resolveViaDns, resolveViaWellKnown } from "./lib/bluesky.ts";
 import { handleCandidate, isDid, isExcluded, isHandle, siteOf } from "./lib/detect.ts";
-import { addPerson, refreshPeople, type People, type Profile } from "./lib/people.ts";
+import { addPerson, refreshPeople, withDomainsOnly, type People, type Profile } from "./lib/people.ts";
 import {
   getPeople,
   getSettings,
@@ -113,7 +113,7 @@ async function markOnPage(tabId: number, url: string, did: string): Promise<void
 }
 
 // Method 2 (and 3 when enabled): is this page's domain someone's handle?
-async function checkHost(host: string, dnsLookup: boolean, pageUrl: string): Promise<string | null> {
+async function checkHost(host: string, dnsLookup: boolean, site: string): Promise<string | null> {
   const key = `host:${host}`;
   const cached = await claim(key, Date.now());
   if (cached) return cached.did;
@@ -125,20 +125,20 @@ async function checkHost(host: string, dnsLookup: boolean, pageUrl: string): Pro
   // back, so a match here is a two-way verification.
   const profile = did ? await getProfile(did) : null;
   const found = profile?.handle === host ? profile : null;
-  if (found) await save(found, pageUrl, true);
+  if (found) await save(found, site, true);
   await remember(key, found?.did ?? null);
   return found?.did ?? null;
 }
 
 // Method 1: a rel="me" link to a Bluesky profile.
-async function checkActor(actor: string, host: string | null, pageUrl: string): Promise<string | null> {
+async function checkActor(actor: string, host: string | null, site: string): Promise<string | null> {
   const key = `actor:${actor}`;
   const cached = await claim(key, Date.now());
   if (cached) return cached.did;
 
   const profile = await getProfile(actor);
   const found = profile && profile.handle !== "handle.invalid" ? profile : null;
-  if (found) await save(found, pageUrl, found.handle === host);
+  if (found) await save(found, site, found.handle === host);
   await remember(key, found?.did ?? null);
   return found?.did ?? null;
 }
@@ -150,15 +150,17 @@ function isChecked(site: string | null, settings: Settings): site is string {
 async function onPage(tabId: number, pageUrl: string, actors: string[]): Promise<void> {
   await startPage(tabId, pageUrl);
   const settings = await getSettings();
-  if (!isChecked(siteOf(pageUrl), settings)) return;
+  // Only the domain is stored with a person, never the full page URL.
+  const site = siteOf(pageUrl);
+  if (!isChecked(site, settings)) return;
 
   const host = handleCandidate(pageUrl);
   const lookups: Promise<string | null>[] = [];
-  if (host) lookups.push(checkHost(host, settings.dnsLookup, pageUrl));
+  if (host) lookups.push(checkHost(host, settings.dnsLookup, site));
 
   const valid = actors.filter((a) => isDid(a) || isHandle(a));
   for (const actor of [...new Set(valid)].slice(0, MAX_ACTORS_PER_PAGE)) {
-    lookups.push(checkActor(actor, host, pageUrl));
+    lookups.push(checkActor(actor, host, site));
   }
 
   await Promise.all(
@@ -254,6 +256,13 @@ ext.tabs.onRemoved.addListener((tabId) => {
     const tabs = await getTabPeople();
     delete tabs[tabId];
     await ext.storage.session.set({ tabs });
+  }).catch(console.error);
+});
+
+// Version 0.2.0 stored the full page URL in foundOn. Keep only the domain.
+ext.runtime.onInstalled.addListener(() => {
+  serialized(async () => {
+    await ext.storage.local.set({ people: withDomainsOnly(await getPeople()) });
   }).catch(console.error);
 });
 

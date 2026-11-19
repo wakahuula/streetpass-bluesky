@@ -21,8 +21,9 @@ use `rel="me"` show up. People with a `*.bsky.social` handle are found only thro
 `rel="me"` links.
 
 Profiles come from the public Bluesky API (`public.api.bsky.app`). No request sends cookies.
-Domains that turned out not to be handles are remembered in session storage for 24 hours,
-so the extension never writes your browsing history to disk.
+For each person found, the extension stores the domain of the site it found them on, never the
+full page URL. Every other site you visit is remembered in session storage for 24 hours, which
+the browser clears when it restarts.
 
 ## In the popup
 

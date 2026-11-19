@@ -1,3 +1,4 @@
+import { ext } from "./lib/ext.ts";
 import { getProfile, getProfiles, resolveViaDns, resolveViaWellKnown } from "./lib/bluesky.ts";
 import { handleCandidate, isDid, isHandle } from "./lib/detect.ts";
 import { addPerson, refreshPeople, type People, type Profile } from "./lib/people.ts";
@@ -21,7 +22,7 @@ function serialized<T>(task: () => Promise<T>): Promise<T> {
 // clears on restart, so the extension never writes browsing history to disk.
 async function shouldCheck(key: string, now: number): Promise<boolean> {
   return serialized(async () => {
-    const { checked = {} } = (await chrome.storage.session.get("checked")) as {
+    const { checked = {} } = (await ext.storage.session.get("checked")) as {
       checked?: Record<string, number>;
     };
     const last = checked[key];
@@ -31,21 +32,21 @@ async function shouldCheck(key: string, now: number): Promise<boolean> {
       if (now - at >= RECHECK_MS) delete checked[k];
     }
     checked[key] = now;
-    await chrome.storage.session.set({ checked });
+    await ext.storage.session.set({ checked });
     return true;
   });
 }
 
 async function updateBadge(unseen: number): Promise<void> {
-  await chrome.action.setBadgeBackgroundColor({ color: BADGE_COLOR });
-  await chrome.action.setBadgeText({ text: unseen > 0 ? String(unseen) : "" });
+  await ext.action.setBadgeBackgroundColor({ color: BADGE_COLOR });
+  await ext.action.setBadgeText({ text: unseen > 0 ? String(unseen) : "" });
 }
 
 async function save(profile: Profile, foundOn: string, verified: boolean): Promise<void> {
   await serialized(async () => {
     const result = addPerson(await getPeople(), profile, foundOn, verified, Date.now());
     const unseen = (await getUnseen()) + (result.isNew ? 1 : 0);
-    await chrome.storage.local.set({ people: result.people, unseen });
+    await ext.storage.local.set({ people: result.people, unseen });
     await updateBadge(unseen);
   });
 }
@@ -87,7 +88,7 @@ async function onPage(pageUrl: string, actors: string[]): Promise<void> {
 
 async function onOpened(): Promise<void> {
   await serialized(async () => {
-    await chrome.storage.local.set({ unseen: 0 });
+    await ext.storage.local.set({ unseen: 0 });
     await updateBadge(0);
   });
 
@@ -100,7 +101,7 @@ async function onOpened(): Promise<void> {
   const profiles = await getProfiles(stale);
   await serialized(async () => {
     const people = refreshPeople(await getPeople(), profiles, Date.now());
-    await chrome.storage.local.set({ people });
+    await ext.storage.local.set({ people });
   });
 }
 
@@ -108,16 +109,16 @@ async function onRemove(did: string): Promise<void> {
   await serialized(async () => {
     const people: People = { ...(await getPeople()) };
     delete people[did];
-    await chrome.storage.local.set({ people });
+    await ext.storage.local.set({ people });
   });
 }
 
-chrome.runtime.onMessage.addListener((message: Message, sender) => {
+ext.runtime.onMessage.addListener((message: Message, sender) => {
   // Only accept messages from this extension's own pages and content scripts.
-  if (sender.id !== chrome.runtime.id) return;
+  if (sender.id !== ext.runtime.id) return;
 
   // Content scripts report web pages; only the popup may change the list.
-  const fromPopup = sender.url?.startsWith(chrome.runtime.getURL("")) ?? false;
+  const fromPopup = sender.url?.startsWith(ext.runtime.getURL("")) ?? false;
 
   let task: Promise<void> | undefined;
   if (message.type === "page" && !fromPopup && sender.url) {
@@ -130,6 +131,6 @@ chrome.runtime.onMessage.addListener((message: Message, sender) => {
   task?.catch((error: unknown) => console.error(error));
 });
 
-chrome.runtime.onStartup.addListener(() => {
+ext.runtime.onStartup.addListener(() => {
   getUnseen().then(updateBadge, console.error);
 });

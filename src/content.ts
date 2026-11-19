@@ -1,6 +1,7 @@
 // Runs on every page. Reports rel="me" links to Bluesky profiles, and tells
 // the background which page it is on, so it can check the domain as a handle.
 
+import { ext } from "./lib/ext.ts";
 import { actorFromHref } from "./lib/detect.ts";
 import type { Message } from "./lib/store.ts";
 
@@ -25,7 +26,7 @@ function report(): void {
   for (const actor of actors) reportedActors.add(actor);
 
   const message: Message = { type: "page", actors };
-  chrome.runtime.sendMessage(message).catch(() => {
+  ext.runtime.sendMessage(message).catch(() => {
     // The extension was reloaded or updated while this page stayed open.
   });
 }

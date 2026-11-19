@@ -1,6 +1,6 @@
 # streetpass-bluesky
 
-A Chrome extension that collects the Bluesky accounts behind the sites you visit.
+A Chrome and Firefox extension that collects the Bluesky accounts behind the sites you visit.
 Inspired by [streetpass.social](https://streetpass.social), which does the same for Mastodon.
 
 ## How it finds people
@@ -30,17 +30,23 @@ Needs Node 24 or newer.
 
 ```sh
 npm install
-npm run build   # writes dist/
-npm run dev     # rebuilds on change
+npm run build          # writes dist/chrome and dist/firefox
+npm run dev            # rebuilds the Chrome version on change
+npm run firefox        # builds and opens Firefox with the extension
+npm run lint:firefox   # checks dist/firefox with Mozilla's linter
 npm test
-npm run check   # type check
+npm run check          # type check
 ```
 
-Load it in Chrome: `chrome://extensions`, turn on developer mode, "Load unpacked", pick `dist/`.
+Load it in Chrome: `chrome://extensions`, turn on developer mode, "Load unpacked", pick
+`dist/chrome`. If Firefox hasn't granted access to all websites, the popup shows a button for it.
+
+CI (`.github/workflows/build.yml`) runs the checks and tests on every push to `main` and every
+pull request, and uploads both builds as artifacts.
 
 ```
 src/
-  background.ts   service worker: checks domains and links, keeps the list
+  background.ts   checks domains and links, keeps the list
   content.ts      reports rel="me" links on each page
   lib/            parsing, Bluesky API calls, list rules
   popup/          popup UI

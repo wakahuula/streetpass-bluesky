@@ -44,6 +44,11 @@ Load it in Chrome: `chrome://extensions`, turn on developer mode, "Load unpacked
 CI (`.github/workflows/build.yml`) runs the checks and tests on every push to `main` and every
 pull request, and uploads both builds as artifacts.
 
+To release, bump `version` in `package.json`, commit, and push a matching tag (`v0.2.0`).
+`.github/workflows/release.yml` then builds both versions and attaches
+`streetpass-bluesky-chrome-<version>.zip` and `streetpass-bluesky-firefox-<version>.zip` to a
+GitHub release.
+
 ```
 src/
   background.ts   checks domains and links, keeps the list

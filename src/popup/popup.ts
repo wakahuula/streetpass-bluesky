@@ -121,6 +121,7 @@ function resetClear(): void {
   clearTimeout(clearTimer);
   clear.classList.remove("confirm");
   clear.textContent = "Clear all";
+  clear.removeAttribute("aria-label");
 }
 
 clear.addEventListener("click", () => {
@@ -131,7 +132,12 @@ clear.addEventListener("click", () => {
   }
   const total = Object.keys(state.people).length;
   clear.classList.add("confirm");
-  clear.textContent = `Clear ${total} ${total === 1 ? "person" : "people"}?`;
+  // Short enough to fit next to the title; screen readers get the full question.
+  clear.textContent = `Clear ${total}?`;
+  clear.setAttribute(
+    "aria-label",
+    `Clear ${total} ${total === 1 ? "person" : "people"}? Click again to confirm.`,
+  );
   clearTimer = setTimeout(resetClear, 4000);
 });
 clear.addEventListener("blur", resetClear);

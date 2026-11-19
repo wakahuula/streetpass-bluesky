@@ -1,4 +1,4 @@
-# streetpass-bluesky
+# StreetPass for Bluesky
 
 A Chrome and Firefox extension that collects the Bluesky accounts behind the sites you visit.
 Inspired by [streetpass.social](https://streetpass.social), which does the same for Mastodon.

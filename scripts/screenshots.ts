@@ -37,6 +37,16 @@ const context = await chromium.launchPersistentContext("", {
 try {
   const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent("serviceworker"));
   const id = new URL(worker.url()).host;
+  // On install the background rewrites the stored list once (see withDomainsOnly).
+  // Seeding before that finishes would be overwritten, so wait for it.
+  await worker.evaluate(
+    () =>
+      new Promise<void>((done) => {
+        const check = async () =>
+          (await chrome.storage.local.get("people")).people ? done() : setTimeout(check, 50);
+        check();
+      }),
+  );
   await worker.evaluate((p) => chrome.storage.local.set({ people: p, dnsLookup: false }), people);
 
   // Opened as a tab, the popup sees itself as the active tab. Telling the
@@ -55,8 +65,7 @@ try {
     await page.reload();
     await page.waitForSelector(".person");
     height = await page.evaluate(() => document.documentElement.scrollHeight);
-    await page.setViewportSize({ width: 360, height });
-    await page.screenshot({ path: `site/popup-${scheme}.png` });
+    await page.screenshot({ path: `site/popup-${scheme}.png`, fullPage: true });
     console.log(`site/popup-${scheme}.png  360x${height}`);
   }
 

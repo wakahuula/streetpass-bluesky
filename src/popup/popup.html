@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>streetpass-bluesky</title>
+    <link rel="stylesheet" href="popup-style.css" />
+  </head>
+  <body>
+    <header class="top-bar">
+      <h1>streetpass-bluesky</h1>
+      <span id="count" class="count" hidden></span>
+    </header>
+
+    <main>
+      <ul id="people" class="list" aria-label="People found"></ul>
+      <p id="empty" class="empty" hidden>
+        Nobody yet. When a site you visit uses its domain as a Bluesky handle,
+        or links to a Bluesky profile with <code>rel="me"</code>, its owner
+        shows up here.
+      </p>
+    </main>
+
+    <section class="settings">
+      <div class="switch-row">
+        <label for="dns-lookup" class="switch-text">
+          <span class="switch-label">Look up handles in DNS</span>
+          <span class="switch-supporting">
+            Sends the domain of every site you visit to Cloudflare DNS. Most
+            custom handles are set in DNS, so this finds more people.
+          </span>
+        </label>
+        <input id="dns-lookup" class="switch" type="checkbox" role="switch" />
+      </div>
+    </section>
+
+    <footer>
+      Inspired by
+      <a href="https://streetpass.social" target="_blank" rel="noreferrer">streetpass.social</a>.
+      Made by
+      <a href="https://bsky.app/profile/kosta.lol" target="_blank" rel="noreferrer">kosta.lol</a>.
+    </footer>
+
+    <template id="person-template">
+      <li class="person">
+        <a class="person-link" target="_blank" rel="noreferrer">
+          <span class="avatar" aria-hidden="true"><img alt="" /></span>
+          <span class="person-text">
+            <span class="name"></span>
+            <span class="handle"></span>
+            <span class="source"></span>
+          </span>
+        </a>
+        <button class="icon-button" type="button">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6Z" />
+          </svg>
+        </button>
+      </li>
+    </template>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

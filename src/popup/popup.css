@@ -1,0 +1,369 @@
+/* Material 3 Expressive, hand-written. Color roles are generated from the
+   Bluesky blue #1185fe with material-color-utilities (SchemeVibrant). */
+
+@font-face {
+  font-family: "Google Sans Flex";
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+  src: url("../../node_modules/@fontsource-variable/google-sans-flex/files/google-sans-flex-latin-wght-normal.woff2")
+    format("woff2-variations");
+}
+
+:root {
+  color-scheme: light dark;
+
+  --md-primary: #005db7;
+  --md-on-primary: #ffffff;
+  --md-primary-container: #d6e3ff;
+  --md-on-primary-container: #00468c;
+  --md-tertiary-container: #e5deff;
+  --md-on-tertiary-container: #474070;
+  --md-surface: #f9f9ff;
+  --md-surface-container-low: #f0f3ff;
+  --md-surface-container: #eaedfa;
+  --md-surface-container-highest: #dfe2ef;
+  --md-on-surface: #171c25;
+  --md-on-surface-variant: #414753;
+  --md-outline: #717785;
+  --md-outline-variant: #c1c6d6;
+
+  /* Shape scale. Expressive lists group items into one container with large
+     outer corners and small inner ones. */
+  --shape-xs: 4px;
+  --shape-lg: 20px;
+  --shape-full: 999px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fast: 150ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --md-primary: #a9c7ff;
+    --md-on-primary: #003063;
+    --md-primary-container: #00468c;
+    --md-on-primary-container: #d6e3ff;
+    --md-tertiary-container: #474070;
+    --md-on-tertiary-container: #e5deff;
+    --md-surface: #0f131c;
+    --md-surface-container-low: #171c25;
+    --md-surface-container: #1b2029;
+    --md-surface-container-highest: #30353e;
+    --md-on-surface: #dfe2ef;
+    --md-on-surface-variant: #c1c6d6;
+    --md-outline: #8b919f;
+    --md-outline-variant: #414753;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  width: 360px;
+  margin: 0;
+  padding: 0 12px 16px;
+  background: var(--md-surface);
+  color: var(--md-on-surface);
+  font: 400 14px/20px "Google Sans Flex", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--md-primary);
+  text-underline-offset: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--md-primary);
+  outline-offset: 2px;
+}
+
+/* Top bar */
+
+.top-bar {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 20px 4px 16px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 600;
+  font-variation-settings: "wdth" 100;
+}
+
+.count {
+  color: var(--md-on-surface-variant);
+  font-size: 16px;
+  line-height: 24px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* List */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 392px;
+  overflow-y: auto;
+  border-radius: var(--shape-lg);
+}
+
+.person {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--md-surface-container);
+  border-radius: var(--shape-xs);
+}
+
+.person:first-child {
+  border-top-left-radius: var(--shape-lg);
+  border-top-right-radius: var(--shape-lg);
+}
+
+.person:last-child {
+  border-bottom-left-radius: var(--shape-lg);
+  border-bottom-right-radius: var(--shape-lg);
+}
+
+.person-link {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 4px 12px 16px;
+  color: inherit;
+  text-decoration: none;
+  border-radius: inherit;
+}
+
+/* State layer: on-surface at 8% on hover, 10% on press. */
+.person:has(.person-link:hover) {
+  background: color-mix(in srgb, var(--md-on-surface) 8%, var(--md-surface-container));
+}
+
+.person:has(.person-link:active) {
+  background: color-mix(in srgb, var(--md-on-surface) 10%, var(--md-surface-container));
+}
+
+.person,
+.icon-button {
+  transition: background-color var(--fast) var(--ease);
+}
+
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  background: var(--md-primary-container);
+  color: var(--md-on-primary-container);
+  font-size: 20px;
+  font-weight: 500;
+  mask: url("cookie.svg") center / contain no-repeat;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar img:not([src]) {
+  display: none;
+}
+
+.person-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.name,
+.handle,
+.source {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.name {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+}
+
+.handle {
+  color: var(--md-on-surface-variant);
+}
+
+.source {
+  margin-top: 4px;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 2px 10px;
+  border-radius: var(--shape-full);
+  background: var(--md-tertiary-container);
+  color: var(--md-on-tertiary-container);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+}
+
+.source:empty {
+  display: none;
+}
+
+.icon-button {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--shape-full);
+  background: transparent;
+  color: var(--md-on-surface-variant);
+  cursor: pointer;
+}
+
+.icon-button svg {
+  fill: currentColor;
+}
+
+.icon-button:hover {
+  background: color-mix(in srgb, var(--md-on-surface-variant) 8%, transparent);
+}
+
+.icon-button:active {
+  background: color-mix(in srgb, var(--md-on-surface-variant) 10%, transparent);
+}
+
+.empty {
+  margin: 0;
+  padding: 20px;
+  border-radius: var(--shape-lg);
+  background: var(--md-surface-container-low);
+  color: var(--md-on-surface-variant);
+}
+
+.empty code {
+  font: inherit;
+  color: var(--md-on-surface);
+}
+
+/* Settings */
+
+.settings {
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: var(--shape-lg);
+  background: var(--md-surface-container-low);
+}
+
+.switch-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.switch-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.switch-label {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.switch-supporting {
+  color: var(--md-on-surface-variant);
+}
+
+/* M3 switch: the handle grows when on and again while pressed. */
+.switch {
+  appearance: none;
+  flex: none;
+  position: relative;
+  width: 52px;
+  height: 32px;
+  margin: 0;
+  border: 2px solid var(--md-outline);
+  border-radius: var(--shape-full);
+  background: var(--md-surface-container-highest);
+  cursor: pointer;
+  transition: background-color var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+
+.switch::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--shape-full);
+  background: var(--md-outline);
+  transform: translateY(-50%);
+  transition: left var(--fast) var(--ease), width var(--fast) var(--ease),
+    height var(--fast) var(--ease), background-color var(--fast) var(--ease);
+}
+
+.switch:checked {
+  border-color: var(--md-primary);
+  background: var(--md-primary);
+}
+
+.switch:checked::before {
+  left: 22px;
+  width: 24px;
+  height: 24px;
+  background: var(--md-on-primary);
+}
+
+.switch:active::before {
+  width: 28px;
+  height: 28px;
+  left: 2px;
+}
+
+.switch:checked:active::before {
+  left: 18px;
+}
+
+/* Footer */
+
+footer {
+  padding: 16px 4px 0;
+  color: var(--md-on-surface-variant);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before {
+    transition: none !important;
+  }
+}

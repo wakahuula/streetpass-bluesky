@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>streetpass-bluesky</title>
+    <meta name="description" content="A browser extension that finds the Bluesky accounts behind the sites you visit." />
+    <meta property="og:title" content="streetpass-bluesky" />
+    <meta property="og:description" content="A browser extension that finds the Bluesky accounts behind the sites you visit." />
+    <meta property="og:image" content="og.png" />
+    <meta name="theme-color" content="#446ccf" />
+    <link rel="icon" href="logo.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="me" href="https://bsky.app/profile/kosta.lol" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <img class="logo" src="logo.svg" alt="" width="112" height="112" />
+      <h1>streetpass-bluesky</h1>
+      <p class="lede">Finds the Bluesky accounts behind the sites you visit.</p>
+      <div class="actions">
+        <a class="button filled" href="https://github.com/wakahuula/streetpass-bluesky/releases/latest/download/streetpass-bluesky-chrome.zip">
+          Download for Chrome
+        </a>
+        <a class="button tonal" href="https://github.com/wakahuula/streetpass-bluesky/releases/latest/download/streetpass-bluesky-firefox.zip">
+          Download for Firefox
+        </a>
+      </div>
+      <p class="version">
+        Version {{version}}.
+        <a href="https://github.com/wakahuula/streetpass-bluesky">Source on GitHub</a>
+      </p>
+    </header>
+
+    <main>
+      <picture class="screenshot">
+        <source srcset="popup-dark.png" media="(prefers-color-scheme: dark)" />
+        <img
+          src="popup-light.png"
+          width="360"
+          height="707"
+          alt="The extension's popup: one person on the current page, two found today, and the switches for pausing and DNS lookup."
+        />
+      </picture>
+
+      <section id="how">
+        <h2>How it finds people</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>Domain handles</h3>
+            <p>
+              Many people use their own domain as their Bluesky handle. On every
+              site you visit, the extension asks that site whether its domain is
+              a handle, and checks the answer with Bluesky.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Links with <code>rel="me"</code></h3>
+            <p>
+              A site can link to its owner's Bluesky profile with
+              <code>rel="me"</code>. Those people show up as unverified, because
+              any page can link to any profile.
+            </p>
+          </article>
+          <article class="card">
+            <h3>DNS lookup, if you turn it on</h3>
+            <p>
+              Most custom handles are set in DNS. With DNS lookup on, the
+              extension asks Cloudflare about the domain of every site you visit
+              and finds those people too.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="install">
+        <h2>Install</h2>
+        <p>
+          The extension isn't in the Chrome Web Store or on addons.mozilla.org
+          yet, so it installs by hand.
+        </p>
+        <div class="cards">
+          <article class="card">
+            <h3>Chrome</h3>
+            <ol>
+              <li>Download the Chrome build and unzip it.</li>
+              <li>Open <code>chrome://extensions</code> and turn on Developer mode.</li>
+              <li>Click "Load unpacked" and pick the unzipped folder.</li>
+            </ol>
+          </article>
+          <article class="card">
+            <h3>Firefox</h3>
+            <ol>
+              <li>Download the Firefox build.</li>
+              <li>Open <code>about:debugging</code> and go to "This Firefox".</li>
+              <li>Click "Load Temporary Add-on" and pick the zip file.</li>
+            </ol>
+            <p>Firefox removes unsigned add-ons when it restarts.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="privacy">
+        <h2>Privacy</h2>
+        <ul class="privacy">
+          <li>No analytics, no account and no server of its own. Everything runs in your browser.</li>
+          <li>Requests go to the site you are already on and to Bluesky's public API, and never carry cookies.</li>
+          <li>Cloudflare sees the sites you visit only if you turn on DNS lookup.</li>
+          <li>
+            Your browsing history never reaches the disk. Checked sites are kept in
+            session storage, which the browser clears when it restarts.
+          </li>
+          <li>The list, your settings and the sites you exclude stay on your device and don't sync through your browser account.</li>
+          <li>
+            The code is open source on
+            <a href="https://github.com/wakahuula/streetpass-bluesky">GitHub</a>.
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      Inspired by <a href="https://streetpass.social">streetpass.social</a>.
+      Made by <a href="https://bsky.app/profile/kosta.lol">kosta.lol</a>.
+    </footer>
+  </body>
+</html>

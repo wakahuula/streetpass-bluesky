@@ -32,12 +32,13 @@ jobs:
         with:
           path: artifacts
 
+      # The names carry no version, so releases/latest/download/<name> stays a
+      # stable link for the website.
       - name: Zip builds
         run: |
-          version=${GITHUB_REF_NAME#v}
           for browser in chrome firefox; do
             # Zip from inside the folder: the stores want manifest.json at the root.
-            (cd "artifacts/streetpass-bluesky-$browser" && zip -qr "$GITHUB_WORKSPACE/streetpass-bluesky-$browser-$version.zip" .)
+            (cd "artifacts/streetpass-bluesky-$browser" && zip -qr "$GITHUB_WORKSPACE/streetpass-bluesky-$browser.zip" .)
           done
 
       - name: Create release

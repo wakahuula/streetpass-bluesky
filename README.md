@@ -45,6 +45,7 @@ Needs Node 24 or newer.
 npm install
 npm run build          # writes dist/chrome and dist/firefox
 npm run dev            # rebuilds the Chrome version on change
+npm run site           # builds the website into dist/site
 npm run firefox        # builds and opens Firefox with the extension
 npm run lint:firefox   # checks dist/firefox with Mozilla's linter
 npm test
@@ -59,16 +60,21 @@ pull request, and uploads both builds as artifacts.
 
 To release, bump `version` in `package.json`, commit, and push a matching tag (`v0.2.0`).
 `.github/workflows/release.yml` then builds both versions and attaches
-`streetpass-bluesky-chrome-<version>.zip` and `streetpass-bluesky-firefox-<version>.zip` to a
-GitHub release.
+`streetpass-bluesky-chrome.zip` and `streetpass-bluesky-firefox.zip` to a GitHub release.
+
+The website in `site/` goes to GitHub Pages on every push to `main`
+(`.github/workflows/pages.yml`). Its popup screenshots are static files in `site/`; they show
+made-up people with `.example` handles.
 
 ```
+site/             website for GitHub Pages
 src/
+  theme.css       colors, shapes and font, shared by popup and website
   background.ts   checks domains and links, keeps the list
   content.ts      reports rel="me" links on each page
   lib/            parsing, Bluesky API calls, list rules
   popup/          popup UI
-scripts/          icon and avatar shape, drawn at build time
+scripts/          icon, avatar shape and website build
 test/             node:test tests for src/lib
 ```
 

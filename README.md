@@ -51,7 +51,7 @@ npm run build          # writes dist/chrome and dist/firefox
 npm run dev            # rebuilds the Chrome version on change
 npm run site           # builds the website into dist/site
 npm run screenshots    # renders the popup screenshots in site/
-npm run store-assets   # renders the Chrome Web Store graphics into dist/store
+npm run store-assets   # renders the Chrome Web Store graphics into store/
 npm run firefox        # builds and opens Firefox with the extension
 npm run lint:firefox   # checks dist/firefox with Mozilla's linter
 npm test
@@ -76,6 +76,7 @@ the browser it needs.
 
 ```
 site/             website for GitHub Pages
+store/            Chrome Web Store graphics (npm run store-assets)
 src/
   theme.css       colors, shapes and font, shared by popup and website
   background.ts   checks domains and links, keeps the list

@@ -1,4 +1,4 @@
-// Renders the Chrome Web Store graphics into dist/store/:
+// Renders the Chrome Web Store graphics into store/ (committed):
 //   icon-128.png         store icon, 96px artwork with 16px transparent margin
 //   screenshot-1.jpg     1280x800, light popup
 //   screenshot-2.jpg     1280x800, dark popup
@@ -14,8 +14,11 @@ import { Resvg } from "@resvg/resvg-js";
 import { chromium } from "playwright";
 import { iconSvg } from "./icons.ts";
 
-const out = "dist/store";
+const out = "store";
+// The HTML pages the images are rendered from; build output, not committed.
+const pages = "dist/store-pages";
 mkdirSync(out, { recursive: true });
+mkdirSync(pages, { recursive: true });
 
 // Store icon: shrink the 100-unit artwork to 96 of 128 pixels by widening the viewBox.
 const padded = iconSvg().replace('viewBox="0 0 100 100"', 'viewBox="-16.667 -16.667 133.333 133.333"');
@@ -113,7 +116,7 @@ const browser = await chromium.launch({ channel: "chromium" });
 try {
   for (const asset of assets) {
     const tab = await browser.newPage({ viewport: { width: asset.width, height: asset.height } });
-    const path = resolve(out, `${asset.name}.html`);
+    const path = resolve(pages, `${asset.name}.html`);
     writeFileSync(path, asset.html);
     await tab.goto(pathToFileURL(path).href);
     await tab.evaluate(() => document.fonts.ready);

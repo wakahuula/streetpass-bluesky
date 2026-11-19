@@ -20,10 +20,13 @@ Without the DNS option the list fills slowly: only sites that serve the well-kno
 use `rel="me"` show up. People with a `*.bsky.social` handle are found only through
 `rel="me"` links.
 
-Profiles come from the public Bluesky API (`public.api.bsky.app`). No request sends cookies.
+Profiles come from the public Bluesky API (`public.api.bsky.app`), and the popup loads profile
+pictures from Bluesky's image server (`cdn.bsky.app`). No request sends cookies.
 For each person found, the extension stores the domain of the site it found them on, never the
 full page URL. Every other site you visit is remembered in session storage for 24 hours, which
 the browser clears when it restarts.
+
+The full privacy policy is at <https://wakahuula.github.io/streetpass-bluesky/privacy.html>.
 
 ## In the popup
 

@@ -20,7 +20,9 @@ await esbuild.build({
   logLevel: "info",
 });
 
-writeFileSync(`${out}/index.html`, readFileSync("site/index.html", "utf8").replaceAll("{{version}}", version));
+for (const page of ["index.html", "privacy.html"]) {
+  writeFileSync(`${out}/${page}`, readFileSync(`site/${page}`, "utf8").replaceAll("{{version}}", version));
+}
 for (const file of ["popup-light.png", "popup-dark.png"]) copyFileSync(`site/${file}`, `${out}/${file}`);
 writeFileSync(`${out}/logo.svg`, iconSvg());
 writeFileSync(`${out}/apple-touch-icon.png`, iconPng(180));

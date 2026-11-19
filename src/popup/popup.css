@@ -454,6 +454,13 @@ footer {
   line-height: 16px;
 }
 
+/* The saved state arrives after the first paint. Without this, every switch
+   would slide into place each time the popup opens. */
+body:not(.ready) .switch,
+body:not(.ready) .switch::before {
+  transition: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before {

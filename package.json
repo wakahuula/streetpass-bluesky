@@ -8,6 +8,7 @@
     "dev": "node build.ts --watch",
     "site": "node scripts/site.ts",
     "screenshots": "node build.ts --target=chrome && node scripts/screenshots.ts",
+    "store-assets": "node scripts/store-assets.ts",
     "firefox": "node build.ts --target=firefox && npx --yes web-ext@10.8.0 run --source-dir dist/firefox",
     "lint:firefox": "npx --yes web-ext@10.8.0 lint --source-dir dist/firefox --warnings-as-errors",
     "check": "tsc --noEmit",

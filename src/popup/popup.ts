@@ -205,6 +205,8 @@ async function init(): Promise<void> {
   ]);
   renderPeople();
   renderSettings();
+  // Turn transitions on only after the saved state has been painted.
+  requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.add("ready")));
   send({ type: "opened" });
   await renderAccess();
 }

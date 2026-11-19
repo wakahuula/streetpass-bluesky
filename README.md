@@ -51,6 +51,7 @@ npm run build          # writes dist/chrome and dist/firefox
 npm run dev            # rebuilds the Chrome version on change
 npm run site           # builds the website into dist/site
 npm run screenshots    # renders the popup screenshots in site/
+npm run store-assets   # renders the Chrome Web Store graphics into dist/store
 npm run firefox        # builds and opens Firefox with the extension
 npm run lint:firefox   # checks dist/firefox with Mozilla's linter
 npm test

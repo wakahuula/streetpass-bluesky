@@ -5,6 +5,8 @@ import {
   didFromDnsJson,
   didFromWellKnown,
   handleCandidate,
+  isExcluded,
+  siteOf,
 } from "../src/lib/detect.ts";
 
 test("handleCandidate takes the https hostname without www", () => {
@@ -70,4 +72,18 @@ test("didFromDnsJson rejects conflicting or missing records", () => {
   assert.equal(didFromDnsJson({ Status: 3 }), null);
   assert.equal(didFromDnsJson(null), null);
   assert.equal(didFromDnsJson({ Answer: [{ type: 5, data: "cname.example." }] }), null);
+});
+
+test("siteOf drops www and rejects non-web URLs", () => {
+  assert.equal(siteOf("https://www.example.com/a"), "example.com");
+  assert.equal(siteOf("http://blog.example.com/"), "blog.example.com");
+  assert.equal(siteOf("chrome://extensions"), null);
+  assert.equal(siteOf("nope"), null);
+});
+
+test("isExcluded covers subdomains but not lookalikes", () => {
+  assert.equal(isExcluded("example.com", ["example.com"]), true);
+  assert.equal(isExcluded("mail.example.com", ["example.com"]), true);
+  assert.equal(isExcluded("badexample.com", ["example.com"]), false);
+  assert.equal(isExcluded("example.com", []), false);
 });

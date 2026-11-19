@@ -9,6 +9,14 @@ let reportedUrl = "";
 const reportedActors = new Set<string>();
 
 function report(): void {
+  // A new URL (also inside a single-page app) is a new page: report every
+  // link again, so the background knows who is on it.
+  const urlChanged = location.href !== reportedUrl;
+  if (urlChanged) {
+    reportedUrl = location.href;
+    reportedActors.clear();
+  }
+
   const actors: string[] = [];
   for (const el of document.querySelectorAll<HTMLAnchorElement | HTMLLinkElement>(
     'a[rel~="me" i][href], link[rel~="me" i][href]',
@@ -19,10 +27,8 @@ function report(): void {
     if (actor && !reportedActors.has(actor)) actors.push(actor);
   }
 
-  const urlChanged = location.href !== reportedUrl;
   if (!urlChanged && actors.length === 0) return;
 
-  reportedUrl = location.href;
   for (const actor of actors) reportedActors.add(actor);
 
   const message: Message = { type: "page", actors };

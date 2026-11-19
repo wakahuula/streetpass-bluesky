@@ -5,6 +5,8 @@ import { Resvg } from "@resvg/resvg-js";
 import { cookiePoints } from "./shape.ts";
 
 export const BRAND = "#446ccf";
+// Toolbar icon while the current page shows nobody.
+export const INACTIVE = "#7d808e";
 
 const FINGER = 6.4;
 const THUMB = 7.4;
@@ -27,7 +29,7 @@ function hand(fill: string, grow = 0): string {
   ].join("");
 }
 
-export function iconSvg(): string {
+export function iconSvg(color = BRAND): string {
   const cookie = cookiePoints();
   const [scale, tilt, offset, wrist] = [0.86, 22, 23, 80];
   const left = `translate(${50 - offset} ${wrist}) rotate(${tilt}) scale(${scale})`;
@@ -35,15 +37,15 @@ export function iconSvg(): string {
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">`,
     `<clipPath id="cookie"><polygon points="${cookie}"/></clipPath>`,
-    `<polygon points="${cookie}" fill="${BRAND}"/>`,
+    `<polygon points="${cookie}" fill="${color}"/>`,
     `<g clip-path="url(#cookie)">`,
     `<g transform="${left}">${hand("#fff")}</g>`,
-    `<g transform="${right}">${hand(BRAND, 5)}</g>`,
+    `<g transform="${right}">${hand(color, 5)}</g>`,
     `<g transform="${right}">${hand("#fff")}</g>`,
     `</g></svg>\n`,
   ].join("");
 }
 
-export function iconPng(size: number): Buffer {
-  return new Resvg(iconSvg(), { fitTo: { mode: "width", value: size } }).render().asPng();
+export function iconPng(size: number, color = BRAND): Buffer {
+  return new Resvg(iconSvg(color), { fitTo: { mode: "width", value: size } }).render().asPng();
 }

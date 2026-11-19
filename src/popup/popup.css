@@ -28,6 +28,8 @@
   --md-on-surface-variant: #434654;
   --md-outline: #737685;
   --md-outline-variant: #c3c6d6;
+  --md-error: #ba1a1a;
+  --md-surface-container-high: #e6e7f5;
 
   /* Shape scale. Expressive lists group items into one container with large
      outer corners and small inner ones. */
@@ -55,6 +57,8 @@
     --md-on-surface-variant: #c3c6d6;
     --md-outline: #8d909f;
     --md-outline-variant: #434654;
+    --md-error: #ffb4ab;
+    --md-surface-container-high: #272a34;
   }
 }
 
@@ -86,15 +90,22 @@ a {
 
 /* Top bar */
 
+/* Fixed height, so the header doesn't move when "Clear all" appears. */
 .top-bar {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 8px;
-  padding: 20px 4px 16px;
+  height: 64px;
+  margin-bottom: 4px;
+  padding-left: 4px;
 }
 
 h1 {
+  min-width: 0;
   margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font-size: 22px;
   line-height: 28px;
   font-weight: 600;
@@ -108,6 +119,102 @@ h1 {
   font-variant-numeric: tabular-nums;
 }
 
+.text-button {
+  flex: none;
+  margin-left: auto;
+  white-space: nowrap;
+  height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--shape-full);
+  background: transparent;
+  color: var(--md-primary);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+
+.text-button:hover {
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.text-button:active {
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.text-button.confirm {
+  color: var(--md-error);
+}
+
+/* The confirm label carries the number, so the count steps aside for it. */
+.top-bar:has(.confirm) .count {
+  display: none;
+}
+
+.text-button[hidden] {
+  display: none;
+}
+
+/* Search */
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+  margin-bottom: 16px;
+  padding: 0 16px;
+  border-radius: var(--shape-full);
+  background: var(--md-surface-container-high);
+  color: var(--md-on-surface-variant);
+}
+
+.search[hidden] {
+  display: none;
+}
+
+.search svg {
+  flex: none;
+  fill: currentColor;
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--md-on-surface);
+  font: inherit;
+  font-size: 16px;
+  outline: none;
+}
+
+.search input::placeholder {
+  color: var(--md-on-surface-variant);
+}
+
+.search:focus-within {
+  outline: 2px solid var(--md-primary);
+  outline-offset: -2px;
+}
+
+/* Groups */
+
+.group + .group {
+  margin-top: 16px;
+}
+
+.group h2 {
+  margin: 0 0 8px;
+  padding: 0 4px;
+  color: var(--md-on-surface-variant);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
 /* List */
 
 .list {
@@ -117,8 +224,6 @@ h1 {
   margin: 0;
   padding: 0;
   list-style: none;
-  max-height: 392px;
-  overflow-y: auto;
   border-radius: var(--shape-lg);
 }
 
@@ -322,6 +427,16 @@ h1 {
   background: var(--md-surface-container-low);
 }
 
+.settings .switch-row + .switch-row {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--md-outline-variant);
+}
+
+.switch-row[hidden] {
+  display: none;
+}
+
 .switch-row {
   display: flex;
   align-items: center;
@@ -410,4 +525,9 @@ footer {
   *::before {
     transition: none !important;
   }
+}
+
+.switch:disabled {
+  opacity: 0.38;
+  cursor: default;
 }

@@ -5,7 +5,7 @@
 
 import * as esbuild from "esbuild";
 import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { iconPng } from "./scripts/icons.ts";
+import { INACTIVE, iconPng } from "./scripts/icons.ts";
 import { cookieSvg } from "./scripts/shape.ts";
 
 const TARGETS = ["chrome", "firefox"] as const;
@@ -49,6 +49,7 @@ async function build(target: Target): Promise<void> {
   mkdirSync(`${out}/icons`, { recursive: true });
   for (const size of [16, 32, 48, 128]) {
     writeFileSync(`${out}/icons/${size}.png`, iconPng(size));
+    writeFileSync(`${out}/icons/inactive-${size}.png`, iconPng(size, INACTIVE));
   }
 
   const writeStatic = () => {

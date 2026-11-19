@@ -97,3 +97,21 @@ export function didFromDnsJson(json: unknown): string | null {
   if (dids.size !== 1) return null;
   return [...dids][0] ?? null;
 }
+
+// The site a page belongs to, for exclusions and display: the hostname
+// without "www.", for http and https pages only.
+export function siteOf(pageUrl: string): string | null {
+  let url: URL;
+  try {
+    url = new URL(pageUrl);
+  } catch {
+    return null;
+  }
+  if (url.protocol !== "https:" && url.protocol !== "http:") return null;
+  return url.hostname.toLowerCase().replace(/^www\./, "") || null;
+}
+
+// Excluding a site also excludes its subdomains.
+export function isExcluded(site: string, excluded: readonly string[]): boolean {
+  return excluded.some((e) => site === e || site.endsWith(`.${e}`));
+}

@@ -24,6 +24,19 @@ Profiles come from the public Bluesky API (`public.api.bsky.app`). No request se
 Domains that turned out not to be handles are remembered in session storage for 24 hours,
 so the extension never writes your browsing history to disk.
 
+## In the popup
+
+- The toolbar icon turns blue while the current page shows someone, and that person is listed
+  under "On this page". The badge counts people found since you last opened the popup.
+- Search filters by name, handle or site. The rest of the list is grouped into today, this
+  week and earlier.
+- "Look for people" pauses the extension. "Look on example.com" excludes the current site and
+  its subdomains.
+- "Clear all" empties the list after a second click.
+
+Settings, including the excluded sites, stay in local storage on this device. They are not
+synced through your browser account.
+
 ## Develop
 
 Needs Node 24 or newer.

@@ -70,3 +70,45 @@ export function profileUrl(person: Pick<Person, "did" | "handle">): string {
   const actor = person.handle === "handle.invalid" ? person.did : person.handle;
   return `https://bsky.app/profile/${actor}`;
 }
+
+// Groups shown in the popup, in this order. People on the current page are
+// listed there only, not again under the day they were first found.
+export type Group = { title: string; people: Person[] };
+
+export function matchesQuery(person: Person, query: string): boolean {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  return [person.displayName ?? "", person.handle, person.foundOn].some((v) =>
+    v.toLowerCase().includes(q),
+  );
+}
+
+export function groupPeople(
+  people: People,
+  onPage: readonly string[],
+  query: string,
+  now: number,
+): Group[] {
+  const startOfToday = new Date(now).setHours(0, 0, 0, 0);
+  const weekAgo = startOfToday - 6 * 24 * 60 * 60 * 1000;
+  const here = new Set(onPage);
+
+  const groups: Group[] = [
+    { title: "On this page", people: [] },
+    { title: "Today", people: [] },
+    { title: "This week", people: [] },
+    { title: "Earlier", people: [] },
+  ];
+  for (const person of sortedPeople(people)) {
+    if (!matchesQuery(person, query)) continue;
+    const index = here.has(person.did)
+      ? 0
+      : person.foundAt >= startOfToday
+        ? 1
+        : person.foundAt >= weekAgo
+          ? 2
+          : 3;
+    groups[index]!.people.push(person);
+  }
+  return groups.filter((g) => g.people.length > 0);
+}

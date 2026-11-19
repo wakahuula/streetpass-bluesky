@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { addPerson, profileUrl, refreshPeople, sortedPeople } from "../src/lib/people.ts";
+import {
+  addPerson,
+  groupPeople,
+  profileUrl,
+  refreshPeople,
+  sortedPeople,
+  type People,
+} from "../src/lib/people.ts";
 
 const alice = { did: "did:plc:alice", handle: "alice.com", displayName: "Alice" };
 
@@ -53,4 +60,35 @@ test("profileUrl falls back to the DID for invalid handles", () => {
     profileUrl({ did: "did:plc:x", handle: "handle.invalid" }),
     "https://bsky.app/profile/did:plc:x",
   );
+});
+
+test("groupPeople sorts people into page, today, week and earlier", () => {
+  const now = new Date(2026, 10, 19, 12).getTime();
+  const day = 24 * 60 * 60 * 1000;
+  const person = (did: string, foundAt: number) => ({
+    did, handle: `${did}.com`, foundOn: `https://${did}.com/`, foundAt, verified: true, refreshedAt: foundAt,
+  });
+  const people: People = {
+    here: person("here", now - 30 * day),
+    today: person("today", now - 60 * 60 * 1000),
+    week: person("week", now - 3 * day),
+    old: person("old", now - 30 * day),
+  };
+  const groups = groupPeople(people, ["here"], "", now);
+  assert.deepEqual(
+    groups.map((g) => [g.title, g.people.map((p) => p.did)]),
+    [
+      ["On this page", ["here"]],
+      ["Today", ["today"]],
+      ["This week", ["week"]],
+      ["Earlier", ["old"]],
+    ],
+  );
+});
+
+test("groupPeople filters by name, handle or site and drops empty groups", () => {
+  const people = addPerson({}, alice, "https://blog.example/", false, 1).people;
+  assert.equal(groupPeople(people, [], "ALI", 2).length, 1);
+  assert.equal(groupPeople(people, [], "blog.example", 2).length, 1);
+  assert.deepEqual(groupPeople(people, [], "bob", 2), []);
 });

@@ -10,6 +10,9 @@
     <header class="top-bar">
       <h1>streetpass-bluesky</h1>
       <span id="count" class="count" hidden></span>
+      <button id="clear" class="text-button" type="button" aria-live="polite" hidden>
+        Clear all
+      </button>
     </header>
 
     <section id="access" class="access" hidden>
@@ -17,16 +20,35 @@
       <button id="grant" class="filled-button" type="button">Allow access</button>
     </section>
 
-    <main>
-      <ul id="people" class="list" aria-label="People found"></ul>
-      <p id="empty" class="empty" hidden>
-        Nobody yet. When a site you visit uses its domain as a Bluesky handle,
-        or links to a Bluesky profile with <code>rel="me"</code>, its owner
-        shows up here.
-      </p>
-    </main>
+    <div id="search-field" class="search" hidden>
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+        <path d="M19.6 21 13.3 14.7Q12.55 15.3 11.575 15.65 10.6 16 9.5 16 6.775 16 4.888 14.113 3 12.225 3 9.5 3 6.775 4.888 4.888 6.775 3 9.5 3 12.225 3 14.113 4.888 16 6.775 16 9.5 16 10.6 15.65 11.575 15.3 12.55 14.7 13.3L21 19.6ZM9.5 14Q11.375 14 12.688 12.688 14 11.375 14 9.5 14 7.625 12.688 6.312 11.375 5 9.5 5 7.625 5 6.312 6.312 5 7.625 5 9.5 5 11.375 6.312 12.688 7.625 14 9.5 14Z" />
+      </svg>
+      <input id="search" type="search" placeholder="Search" aria-label="Search people" autocomplete="off" />
+    </div>
+
+    <main id="groups"></main>
+
+    <p id="empty" class="empty" hidden>
+      Nobody yet. When a site you visit uses its domain as a Bluesky handle,
+      or links to a Bluesky profile with <code>rel="me"</code>, its owner
+      shows up here.
+    </p>
+    <p id="no-match" class="empty" hidden>Nobody matches your search.</p>
 
     <section class="settings">
+      <div class="switch-row">
+        <label for="active" class="switch-text">
+          <span class="switch-label">Look for people</span>
+        </label>
+        <input id="active" class="switch" type="checkbox" role="switch" />
+      </div>
+      <div id="site-row" class="switch-row" hidden>
+        <label for="site" class="switch-text">
+          <span id="site-label" class="switch-label"></span>
+        </label>
+        <input id="site" class="switch" type="checkbox" role="switch" />
+      </div>
       <div class="switch-row">
         <label for="dns-lookup" class="switch-text">
           <span class="switch-label">Look up handles in DNS</span>
@@ -45,6 +67,13 @@
       Made by
       <a href="https://bsky.app/profile/kosta.lol" target="_blank" rel="noreferrer">kosta.lol</a>.
     </footer>
+
+    <template id="group-template">
+      <section class="group">
+        <h2></h2>
+        <ul class="list"></ul>
+      </section>
+    </template>
 
     <template id="person-template">
       <li class="person">

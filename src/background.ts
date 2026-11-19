@@ -7,7 +7,7 @@ import { getPeople, getSettings, getUnseen, type Message } from "./lib/store.ts"
 const RECHECK_MS = 24 * 60 * 60 * 1000;
 const REFRESH_MS = 60 * 60 * 1000;
 const MAX_ACTORS_PER_PAGE = 10;
-const BADGE_COLOR = "#005db7";
+const BADGE_COLOR = "#446ccf";
 
 // Every read-modify-write of storage.local goes through this queue, so two
 // pages finishing at once can't overwrite each other's additions.

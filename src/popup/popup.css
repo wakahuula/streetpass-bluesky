@@ -1,5 +1,6 @@
 /* Material 3 Expressive, hand-written. Color roles are generated from the
-   Bluesky blue #1185fe with material-color-utilities (SchemeVibrant). */
+   brand color #446ccf with material-color-utilities (SchemeVibrant); the
+   light primary is the brand color itself. */
 
 @font-face {
   font-family: "Google Sans Flex";
@@ -13,20 +14,20 @@
 :root {
   color-scheme: light dark;
 
-  --md-primary: #005db7;
+  --md-primary: #446ccf;
   --md-on-primary: #ffffff;
-  --md-primary-container: #d6e3ff;
-  --md-on-primary-container: #00468c;
-  --md-tertiary-container: #e5deff;
-  --md-on-tertiary-container: #474070;
-  --md-surface: #f9f9ff;
-  --md-surface-container-low: #f0f3ff;
-  --md-surface-container: #eaedfa;
-  --md-surface-container-highest: #dfe2ef;
-  --md-on-surface: #171c25;
-  --md-on-surface-variant: #414753;
-  --md-outline: #717785;
-  --md-outline-variant: #c1c6d6;
+  --md-primary-container: #dae1ff;
+  --md-on-primary-container: #003fa4;
+  --md-tertiary-container: #eaddff;
+  --md-on-tertiary-container: #4e3f6e;
+  --md-surface: #faf8ff;
+  --md-surface-container-low: #f2f3ff;
+  --md-surface-container: #ecedfb;
+  --md-surface-container-highest: #e0e2ef;
+  --md-on-surface: #181b25;
+  --md-on-surface-variant: #434654;
+  --md-outline: #737685;
+  --md-outline-variant: #c3c6d6;
 
   /* Shape scale. Expressive lists group items into one container with large
      outer corners and small inner ones. */
@@ -40,20 +41,20 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --md-primary: #a9c7ff;
-    --md-on-primary: #003063;
-    --md-primary-container: #00468c;
-    --md-on-primary-container: #d6e3ff;
-    --md-tertiary-container: #474070;
-    --md-on-tertiary-container: #e5deff;
-    --md-surface: #0f131c;
-    --md-surface-container-low: #171c25;
-    --md-surface-container: #1b2029;
-    --md-surface-container-highest: #30353e;
-    --md-on-surface: #dfe2ef;
-    --md-on-surface-variant: #c1c6d6;
-    --md-outline: #8b919f;
-    --md-outline-variant: #414753;
+    --md-primary: #b3c5ff;
+    --md-on-primary: #002b75;
+    --md-primary-container: #003fa4;
+    --md-on-primary-container: #dae1ff;
+    --md-tertiary-container: #4e3f6e;
+    --md-on-tertiary-container: #eaddff;
+    --md-surface: #10131c;
+    --md-surface-container-low: #181b25;
+    --md-surface-container: #1c1f29;
+    --md-surface-container-highest: #32343f;
+    --md-on-surface: #e0e2ef;
+    --md-on-surface-variant: #c3c6d6;
+    --md-outline: #8d909f;
+    --md-outline-variant: #434654;
   }
 }
 

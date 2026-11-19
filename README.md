@@ -46,6 +46,7 @@ npm install
 npm run build          # writes dist/chrome and dist/firefox
 npm run dev            # rebuilds the Chrome version on change
 npm run site           # builds the website into dist/site
+npm run screenshots    # renders the popup screenshots in site/
 npm run firefox        # builds and opens Firefox with the extension
 npm run lint:firefox   # checks dist/firefox with Mozilla's linter
 npm test
@@ -63,8 +64,10 @@ To release, bump `version` in `package.json`, commit, and push a matching tag (`
 `streetpass-bluesky-chrome.zip` and `streetpass-bluesky-firefox.zip` to a GitHub release.
 
 The website in `site/` goes to GitHub Pages on every push to `main`
-(`.github/workflows/pages.yml`). Its popup screenshots are static files in `site/`; they show
-made-up people with `.example` handles.
+(`.github/workflows/pages.yml`). Its popup screenshots are files in `site/` showing made-up
+people with `.example` handles. After changing the popup, run `npm run screenshots` to render
+them again from the Chrome build; the first time, `npx playwright install chromium` downloads
+the browser it needs.
 
 ```
 site/             website for GitHub Pages

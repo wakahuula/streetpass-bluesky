@@ -6,8 +6,8 @@ A Chrome and Firefox extension that collects the Bluesky accounts behind the sit
 Inspired by [streetpass.social](https://streetpass.social), which does the same for Mastodon.
 
 [Website](https://wakahuula.github.io/streetpass-bluesky/) ·
-[Download for Chrome](https://github.com/wakahuula/streetpass-bluesky/releases/latest/download/streetpass-bluesky-chrome.zip) ·
-[Download for Firefox](https://github.com/wakahuula/streetpass-bluesky/releases/latest/download/streetpass-bluesky-firefox.zip) ·
+[Chrome Web Store](https://chromewebstore.google.com/detail/mmiohgjfobdkipmdkkpgikobfanblloe) ·
+[Firefox Add-ons](https://addons.mozilla.org/firefox/addon/streetpass-for-bluesky/) ·
 [Privacy policy](https://wakahuula.github.io/streetpass-bluesky/privacy.html)
 
 ## How it finds people

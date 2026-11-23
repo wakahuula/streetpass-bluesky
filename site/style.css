@@ -182,23 +182,9 @@ h3 {
   line-height: 28px;
 }
 
-.card p,
-.card ol {
+.card p {
   margin-top: 8px;
   color: var(--md-on-surface-variant);
-}
-
-.card ol {
-  margin-bottom: 0;
-  padding-left: 20px;
-}
-
-.card li + li {
-  margin-top: 4px;
-}
-
-.card ol + p {
-  margin-top: 12px;
 }
 
 .privacy {
